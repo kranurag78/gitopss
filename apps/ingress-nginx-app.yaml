@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-nginx
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/kranurag78/gitopss.git
+    path: ingress-nginx
+    directory:
+      recurse: true
+    targetRevision: main
+    helm:
+      valueFiles:
+        - values-ingress-nginx.yaml
+  destination:
+    namespace: ingress-nginx
+    name: kind
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
